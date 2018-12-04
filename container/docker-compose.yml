@@ -1,0 +1,36 @@
+
+version: '3'
+services:
+  hmr:
+    image: dawars/hmr-pytorch:cuda92
+    volumes:
+     - "/home/dawars/projects:/projects"
+     - "/home/dawars/datasets:/home/dawars/datasets"
+     - "/home/dawars/.torch:/root/.torch" # pre-trained model weights are downloaded here by pytorch
+     - "/mnt/dawars/hdd1/:/mnt/dawars/hdd1/"
+
+    environment:
+     - "PYTHONPATH=/projects/pytorch_HMR/src"
+  jupyter:
+    image: dawars/hmr-pytorch:cuda92
+    volumes:
+     - "/home/dawars/projects:/projects"
+     - "/home/dawars/datasets:/home/dawars/datasets"
+     - "/home/dawars/.torch:/root/.torch"
+     - "/mnt/dawars/hdd1/:/mnt/dawars/hdd1/"
+    ports:
+     - 8888:8888
+    environment:
+     - "PYTHONPATH=/projects/pytorch_HMR/src"
+    working_dir: /projects
+    command: jupyter notebook --ip 0.0.0.0 --no-browser --allow-root
+  tb:
+      image: dawars/hmr-pytorch:cuda92
+      volumes:
+       - "/home/dawars/projects:/projects"
+       - "/home/dawars/datasets:/home/dawars/datasets"
+       - "/home/dawars/.torch:/root/.torch"
+       - "/mnt/dawars/hdd1/:/mnt/dawars/hdd1/"
+      ports:
+       - 6006:6006
+      command: tensorboard --logdir=/mnt/dawars/hdd1/model_saves/
